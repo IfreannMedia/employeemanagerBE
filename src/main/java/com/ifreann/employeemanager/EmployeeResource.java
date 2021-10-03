@@ -36,6 +36,12 @@ public class EmployeeResource {
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
 
+    @PostMapping("/add-all")
+    public ResponseEntity<List<Long>> addAllEmployees(@RequestBody List<Employee> employees) {
+        List<Long> newEmployeesById = this.employeeService.addAllEmployees(employees);
+        return new ResponseEntity<>(newEmployeesById, HttpStatus.CREATED);
+    }
+
     @PutMapping("/update")
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) {
         Employee updatedEmployee = this.employeeService.updateEmployee(employee);

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -19,7 +20,7 @@ public class EmployeeService {
         this.employeeRepo = employeeRepo;
     }
 
-    public Employee addEmployee(Employee employee) {
+    public Employee addEmployee(final Employee employee) {
         employee.setEmployeeCode(UUID.randomUUID().toString());
         return this.employeeRepo.save(employee);
     }
@@ -28,17 +29,21 @@ public class EmployeeService {
         return this.employeeRepo.findAll();
     }
 
-    public Employee updateEmployee (Employee employee){
+    public Employee updateEmployee (final Employee employee){
         return this.employeeRepo.save(employee);
     }
 
-    public void deleteEmployee (Long id){
+    public void deleteEmployee (final Long id){
         this.employeeRepo.deleteEmployeeById(id);
     }
 
-    public Employee findEmployeeById(Long id) {
+    public Employee findEmployeeById(final Long id) {
         return this.employeeRepo.findEmployeeById(id)
                 .orElseThrow(()-> new UserNotFoundException("User by ID " + id + " was not found"));
     }
 
+    public List<Long> addAllEmployees(final List<Employee> employees) {
+        employees.forEach(employee -> employee.setEmployeeCode(UUID.randomUUID().toString()));
+        return this.employeeRepo.saveAll(employees).stream().map(Employee::getId).collect(Collectors.toList());
+    }
 }
